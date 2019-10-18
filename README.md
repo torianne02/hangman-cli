@@ -1,5 +1,9 @@
 # the-hangman-game
 
+<p align="center">
+  <img src="./images/hangman192-cli.png">
+</p>
+
 This is a hangman CLI game. This game's secret keeper (computer) makes an API request for the word that will be guessed. This word is then displayed using `_` for each letter in the word. The guesser (user) can guess one letter at a time until they either hit 6 incorrect guesses or have guessed the word correctly. The game also keeps track of the guesser's correctly guessed words and returns it to them once they decide to quit. 
 
 ## Installation
