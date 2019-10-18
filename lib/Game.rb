@@ -14,7 +14,11 @@ class Hangman::Game
 
   # logic for guessed letter
   def guess(letter)
-    if @guesses.length < 6 && @word.include?(letter)
+    system('clear')
+    if @guesses.include?(letter)
+      output_display
+      puts "Oops! You already guessed that letter."
+    elsif @guesses.length < 6 && @word.include?(letter)
       @word.each_with_index { |char, i| char == letter ? @display[i] = "#{letter} " : @display } 
       output_display
     elsif @guesses.length < 6 && !@word.include?(letter)
