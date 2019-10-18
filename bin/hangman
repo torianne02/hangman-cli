@@ -1,3 +1,3 @@
 require_relative '../config/environment.rb'
 
-Hangman::CLI.new.call
+Hangman::CLI.new.welcome
