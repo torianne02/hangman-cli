@@ -2,6 +2,8 @@ require_relative '../lib/hangman/version.rb'
 require 'httparty'
 
 class Hangman::CLI 
+  @@guesser_wins = 0
+
   def welcome 
     puts @@hangman_pics[0]
     puts "Welcome to Hangman! Would you like to play?"
@@ -48,6 +50,7 @@ class Hangman::CLI
     @game.guess(input)
 
     if !@game.display.include?("_ ")
+      @@guesser_wins += 1
       puts "You win!"
       start_over?
     elsif @game.guesses.length == 6 
@@ -63,9 +66,12 @@ class Hangman::CLI
     while true
       input = gets.chomp.downcase
       if input == "yes" || input == "y"
+        system('clear')
         get_word
         break
       elsif input == "no" || input == "n"
+        system('clear')
+        puts "You won #{@@guesser_wins} game(s)."
         puts "We're sad to see you go. Goodbye."
         break
       else
