@@ -1,5 +1,5 @@
 require_relative '../lib/hangman/version.rb'
-require 'rest-client'
+require 'httparty'
 
 class Hangman::CLI 
   def welcome 
@@ -21,17 +21,10 @@ class Hangman::CLI
   end 
 
   def get_word 
-    # words = RestClient.get('http://app.linkedin-reach.io/words?minLength=5')
-    # binding.pry
-    # words_arr = [] 
-    # JSON.parse(words).split('').each do |word|
-    #   binding.pry
-    #   words_arr << word 
-    # end 
+    response = HTTParty.get('http://app.linkedin-reach.io/words?minLength=5')
+    words = response.parsed_response
+    word = words.split.sample
 
-    # word = words_arr.sample
-    # binding.pry
-    word = 'apple'
     @game = Hangman::Game.new(word)
     play_game
   end
