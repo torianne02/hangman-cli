@@ -2,7 +2,25 @@ require_relative '../lib/hangman/version.rb'
 require 'rest-client'
 
 class Hangman::CLI 
-  def call  
+  def welcome 
+    puts @@hangman_pics[0]
+    puts "Welcome to Hangman! Would you like to play?"
+
+    while true 
+      input = gets.chomp.downcase
+      if input == 'y' || input == 'yes'
+        get_word
+        break;
+      elsif input == 'n' || input == 'no'
+        puts "Sorry to see you go!"
+        break;
+      else 
+        puts "Invalid input. Please enter yes or no."
+      end 
+    end 
+  end 
+
+  def get_word 
     # words = RestClient.get('http://app.linkedin-reach.io/words?minLength=5')
     # binding.pry
     # words_arr = [] 
@@ -13,23 +31,9 @@ class Hangman::CLI
 
     # word = words_arr.sample
     # binding.pry
-    puts HANGMANPICS[0]
-    puts "Welcome to Hangman! Would you like to play?"
-
-    while true 
-      input = gets.chomp.downcase
-      if input == 'y' || input == 'yes'
-        word = 'apple'
-        @game = Hangman::Game.new(word)
-        play_game
-        break;
-      elsif input == 'n' || input == 'no'
-        puts "Sorry to see you go!"
-        break;
-      else 
-        puts "Invalid input. Please enter yes or no."
-      end 
-    end
+    word = 'apple'
+    @game = Hangman::Game.new(word)
+    play_game
   end
 
   # starts game
@@ -42,7 +46,7 @@ class Hangman::CLI
 
   # prompts guesser for their guess
   def prompt_guesser
-    puts HANGMANPICS[@game.guesses.length]
+    puts @@hangman_pics[@game.guesses.length]
     @game.incorrect_guesses
     @game.display_guesses
 
@@ -52,16 +56,33 @@ class Hangman::CLI
 
     if !@game.display.include?("_ ")
       puts "You win!"
+      start_over?
     elsif @game.guesses.length == 6 
       puts "Secret Keeper Wins!"
+      start_over?
     else
       prompt_guesser
     end 
   end 
 
+  def start_over?
+    puts "Would you like to play again? Please type 'yes' or 'no'."
+    while true
+      input = gets.chomp.downcase
+      if input == "yes" || input == "y"
+        get_word
+        break
+      elsif input == "no" || input == "n"
+        puts "We're sad to see you go. Goodbye."
+        break
+      else
+        puts "Invalid input. Please try again."
+      end
+    end
+  end
 
   # ART
-  HANGMANPICS = ['
+  @@hangman_pics = ['
     +---+
     |   |
         |
