@@ -1,8 +1,7 @@
 require_relative '../lib/hangman/version.rb'
-require 'httparty'
 
 class Hangman::CLI 
-  @@guesser_wins = 0
+  @@player_scores = {}
 
   def welcome 
     puts @@hangman_pics[0]
@@ -11,7 +10,11 @@ class Hangman::CLI
     while true 
       input = gets.chomp.downcase
       if input == 'y' || input == 'yes'
-        get_word
+        api_call = Hangman::WordCall.new
+        ask_num_players
+        who_is_playing
+        @game = Hangman::Game.new(api_call.word)
+        play_game
         break;
       elsif input == 'n' || input == 'no'
         puts "Sorry to see you go!"
@@ -22,14 +25,21 @@ class Hangman::CLI
     end 
   end 
 
-  def get_word 
-    response = HTTParty.get('http://app.linkedin-reach.io/words?minLength=5')
-    words = response.parsed_response
-    word = words.split.sample
+  def ask_num_players
+    puts "How many players are playing?"
+    input = gets.chomp.to_i
 
-    @game = Hangman::Game.new(word)
-    play_game
-  end
+    input.times do 
+      puts "What is your name?"
+      player_input = gets.chomp
+      @@player_scores[player_input] = 0
+    end  
+  end 
+
+  def who_is_playing
+    puts "Who is currently playing?"
+    @current_guesser = gets.chomp
+  end 
 
   # starts game
   def play_game
@@ -50,7 +60,7 @@ class Hangman::CLI
     @game.guess(input)
 
     if !@game.display.include?("_ ")
-      @@guesser_wins += 1
+      @@player_scores[@current_guesser] += 1
       puts "You win!"
       start_over?
     elsif @game.guesses.length == 6 
@@ -63,15 +73,22 @@ class Hangman::CLI
 
   def start_over?
     puts "Would you like to play again? Please type 'yes' or 'no'."
+    
     while true
       input = gets.chomp.downcase
       if input == "yes" || input == "y"
         system('clear')
-        get_word
+
+        who_is_playing
+        Hangman::Game.new(api_call.word)
         break
       elsif input == "no" || input == "n"
         system('clear')
-        puts "You won #{@@guesser_wins} game(s)."
+
+        @@player_scores.each do |player_name, win_count| 
+          puts "#{player_name} won #{win_count} game(s)."
+        end 
+
         puts "We're sad to see you go. Goodbye."
         break
       else
