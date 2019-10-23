@@ -10,10 +10,10 @@ class Hangman::CLI
     while true 
       input = gets.chomp.downcase
       if input == 'y' || input == 'yes'
-        api_call = Hangman::WordCall.new
+        @api_call = Hangman::WordCall.new
         ask_num_players
         who_is_playing
-        @game = Hangman::Game.new(api_call.word)
+        @game = Hangman::Game.new(@api_call.word)
         play_game
         break;
       elsif input == 'n' || input == 'no'
@@ -52,8 +52,8 @@ class Hangman::CLI
   # prompts guesser for their guess
   def prompt_guesser
     puts @@hangman_pics[@game.guesses.length]
-    @game.incorrect_guesses
-    @game.display_guesses
+    incorrect_guesses
+    display_guesses
 
     puts "What letter would you like to guess?"
     input = gets.chomp.downcase
@@ -73,29 +73,37 @@ class Hangman::CLI
 
   def start_over?
     puts "Would you like to play again? Please type 'yes' or 'no'."
-    
+
     while true
       input = gets.chomp.downcase
       if input == "yes" || input == "y"
         system('clear')
 
         who_is_playing
-        Hangman::Game.new(api_call.word)
+        @game = Hangman::Game.new(@api_call.word)
+        play_game
         break
       elsif input == "no" || input == "n"
         system('clear')
 
         @@player_scores.each do |player_name, win_count| 
-          puts "#{player_name} won #{win_count} game(s)."
+          puts "#{player_name} won #{win_count} game(s)"
         end 
-
-        puts "We're sad to see you go. Goodbye."
         break
       else
         puts "Invalid input. Please try again."
       end
     end
   end
+
+  # Display Methods
+  def incorrect_guesses
+    puts "Number of Incorrect Guesses: #{@game.guesses.length}"
+  end
+
+  def display_guesses
+    puts "Your Incorrect Guesses: #{@game.guesses.join(", ")}"
+  end 
 
   # ART
   @@hangman_pics = ['

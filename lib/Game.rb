@@ -27,16 +27,7 @@ class Hangman::Game
     end
   end
 
-  # Helper Methods
   def output_display
-    puts @display.join 
+    puts display.join 
   end
-
-  def incorrect_guesses
-    puts "Number of Incorrect Guesses: #{@guesses.length}"
-  end
-
-  def display_guesses
-    puts "Your Incorrect Guesses: #{@guesses.join(", ")}"
-  end 
 end
