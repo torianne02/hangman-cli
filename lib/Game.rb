@@ -1,8 +1,8 @@
 class Hangman::Game
   attr_reader :guesses, :display
 
-  def initialize(word)
-    @word = word.chars
+  def initialize(input)
+    @word = input.chars
     @display = []
 
     @word.length.times do 
