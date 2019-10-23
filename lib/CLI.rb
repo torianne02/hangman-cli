@@ -67,13 +67,16 @@ class Hangman::CLI
      @game.guess(input)
     end 
 
-    if !@game.display.include?("_ ")
-      @@player_scores[@current_guesser] += 1
-      puts "You win!"
-      start_over?
-    elsif @game.guesses.length == 6 
-      puts "#{@game.word.join}"
-      puts "Secret Keeper Wins!"
+    if @game.game_over? == true
+      if !@game.display.include?("_ ")
+        @@player_scores[@current_guesser] += 1
+        
+        puts "You win!"
+      else 
+        puts "#{@game.word.join}"
+        puts "Secret Keeper Wins!"
+      end 
+
       start_over?
     else
       prompt_guesser
