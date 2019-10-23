@@ -11,8 +11,10 @@ class Hangman::CLI
       input = gets.chomp.downcase
       if input == 'y' || input == 'yes'
         @api_call = Hangman::WordCall.new
+
         ask_num_players
-        who_is_playing
+        @@player_scores.length > 1 ? who_is_playing : @current_guesser = @@player_scores.keys[0]
+
         @game = Hangman::Game.new(@api_call.word)
         play_game
         break;
@@ -52,18 +54,25 @@ class Hangman::CLI
   # prompts guesser for their guess
   def prompt_guesser
     puts @@hangman_pics[@game.guesses.length]
-    incorrect_guesses
-    display_guesses
+    incorrect_guesses_count
+    display_incorrect_guesses
 
     puts "What letter would you like to guess?"
     input = gets.chomp.downcase
-    @game.guess(input)
+
+    if @game.guesses.include?(input)
+      system('clear')
+      puts "Oops! You already guessed that letter."
+    else 
+     @game.guess(input)
+    end 
 
     if !@game.display.include?("_ ")
       @@player_scores[@current_guesser] += 1
       puts "You win!"
       start_over?
     elsif @game.guesses.length == 6 
+      puts "#{@game.word.join}"
       puts "Secret Keeper Wins!"
       start_over?
     else
@@ -97,11 +106,11 @@ class Hangman::CLI
   end
 
   # Display Methods
-  def incorrect_guesses
+  def incorrect_guesses_count
     puts "Number of Incorrect Guesses: #{@game.guesses.length}"
   end
 
-  def display_guesses
+  def display_incorrect_guesses
     puts "Your Incorrect Guesses: #{@game.guesses.join(", ")}"
   end 
 
