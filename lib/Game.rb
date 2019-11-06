@@ -24,9 +24,9 @@ class Hangman::Game
 
   def game_over?
     if !display.include?("_ ") || guesses.length == 6 
-      return true
+      true
     else
-      return false
+      false
     end 
   end
 end
