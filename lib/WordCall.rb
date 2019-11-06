@@ -4,10 +4,12 @@ class Hangman::WordCall
 
   def initialize
     @words = []
+    @used_words = []
 
     get_words_arr
   end 
 
+  # currently only grabs words that start with 'a'
   def get_words_arr
     start_count = 0
 
@@ -31,7 +33,10 @@ class Hangman::WordCall
     end 
 
     def word 
-      @words.sample
+      chosen_word = @words.sample
+
+      # prevents same word being chosen 2x in one game session
+      @used_words.include?(chosen_word) ? word : chosen_word
     end 
   end
 end 
