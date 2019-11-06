@@ -18,6 +18,7 @@ class Hangman::CLI
         @game = Hangman::Game.new(@api_call.word)
         system('clear')
         prompt_guesser
+
         break;
       elsif input == 'n' || input == 'no'
         puts "Sorry to see you go!"
@@ -58,8 +59,8 @@ class Hangman::CLI
 
         who_is_playing if @@player_scores.length != 1
         @game = Hangman::Game.new(@api_call.word)
-
         prompt_guesser
+        
         break
       elsif input == "no" || input == "n"
         system('clear')
@@ -71,28 +72,6 @@ class Hangman::CLI
       end
     end
   end
-
-  def already_guessed?(letter)
-    if @game.guesses.include?(letter)
-      system('clear')
-      puts "Oops! You already guessed that letter."
-    else 
-      @game.guess(letter)
-    end 
-  end 
-
-  def end_game
-    if !@game.display.include?("_ ")
-      @@player_scores[@current_player] += 1
-      
-      puts output_display
-      puts "You win!"
-    else 
-      puts "Oh no! You ran out of guesses.\n\nThe word was #{@game.word.join}\n\n"
-    end 
-
-    start_over?
-  end 
 
   # get num of players and their names - creates key/value pairs in hash
   def ask_num_players
@@ -111,7 +90,31 @@ class Hangman::CLI
     @current_player = user_input
   end 
 
-  # Helper Methods
+  # checks if letter has been guessed before
+  def already_guessed?(letter)
+    if @game.guesses.include?(letter)
+      system('clear')
+      puts "Oops! You already guessed that letter."
+    else 
+      @game.guess(letter)
+    end 
+  end 
+
+  # determines if player won or lost and ends game
+  def end_game
+    if !@game.display.include?("_ ")
+      @@player_scores[@current_player] += 1
+      
+      puts output_display
+      puts "You win!"
+    else 
+      puts "Oh no! You ran out of guesses.\n\nThe word was #{@game.word.join}\n\n"
+    end 
+
+    start_over?
+  end
+
+  # Helper Method
   def user_input
     @input = gets.chomp 
   end 
