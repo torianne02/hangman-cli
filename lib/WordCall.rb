@@ -12,7 +12,6 @@ class Hangman::WordCall
   # currently only grabs words that start with 'a'
   def get_words_arr
     start_count = 0
-
     keep_fetching = true
 
     while keep_fetching
