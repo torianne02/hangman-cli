@@ -17,9 +17,7 @@ class Hangman::Game
     system('clear')
     if @guesses.length < 6 && @word.include?(letter)
       @word.each_with_index { |char, i| char == letter ? @display[i] = "#{letter} " : @display } 
-      output_display
     elsif @guesses.length < 6 && !@word.include?(letter)
-      output_display
       @guesses << letter
     end
   end
@@ -30,9 +28,5 @@ class Hangman::Game
     else
       return false
     end 
-  end
-
-  def output_display
-    puts display.join 
   end
 end
