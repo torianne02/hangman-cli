@@ -31,22 +31,17 @@ class Hangman::CLI
 
   # prompts guesser for their guess
   def prompt_guesser
+    # display all game info
     output_display
     puts @@hangman_pics[@game.guesses.length]
-
     incorrect_guesses_count
     display_incorrect_guesses
 
     puts "What letter would you like to guess?"
     input = user_input.downcase
-
     already_guessed?(input)
 
-    if @game.game_over? == true
-      end_game
-    else
-      prompt_guesser
-    end 
+    @game.game_over? == true ? end_game : prompt_guesser
   end 
 
   def start_over?
